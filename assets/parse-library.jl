@@ -30,7 +30,9 @@ for shelf in library
           pageDesc::UTF8String = page["name"]
           pagePath::UTF8String = page["path"]
           setindex!(pages, pageName, pageDesc)
-          df = DataFrame(shelf=[shelfName], subset=[subset], book=[bookName], page=[pageName], path=[pagePath])
+          pageFile = joinpath(dbfolder, pagePath)
+          pageData = YAML.load_file(pageFile)
+          df = DataFrame(shelf=[shelfName], subset=[subset], book=[bookName], page=[pageName], path=[pagePath], data=[pageData])
           append!(libraryData, df)
         end
       end
