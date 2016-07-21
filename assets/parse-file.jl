@@ -27,6 +27,55 @@ const λ_Ap = (0.7682)	#	K	IR
 const λ_s = (0.85211)	#	Cs	IR
 const λ_t = (0.101398)	#	Hg	IR
 
+_fraunhofer_lines = Dict(
+"i" => ("Hg", 0.36501, "blue"),
+"h" => ("Hg", 0.40466, "blue"),
+"g" => ("Hg", 0.43585, "blue"),
+"F'" => ("Cd", 0.47999, "green"),
+"F" => ("Hβ", 0.486134, "infrared"),
+"e" => ("Hg", 0.546073, "infrared"),
+"d" => ("He", 0.58756, "infrared"),
+"D" => ("Na", 0.5893, "red"),
+"C'" => ("Cd", 0.64385, "red"),
+"C" => ("Hα", 0.656281, "red"),
+"r" => ("He", 0.70652, "ultraviolet"),
+"A'" => ("K", 0.7682, "violet"),
+"s" => ("Cs", 0.85211, "yellow"),
+"t" => ("Hg", 1.01398, "yellow"),
+"t2" => ("Ni", 0.299444, ""),
+"T" => ("Fe", 0.302108, ""),
+"P" => ("Ti+", 0.336112, ""),
+"N" => ("Fe", 0.358121, ""),
+"L" => ("Fe", 0.382044, ""),
+"K" => ("Ca+", 0.3933666, ""),
+"H" => ("Ca+", 0.396847, ""),
+"h2" => ("Hδ", 0.410175, ""),
+"G2" => ("Ca", 0.430774, ""),
+"G" => ("Fe", 0.43079, ""),
+"G'" => ("Hγ", 0.434047, ""),
+"e2" => ("Fe", 0.438355, ""),
+"d2" => ("Fe", 0.466814, ""),
+"c" => ("Fe", 0.495761, ""),
+"b4" => ("Mg", 0.516733, ""),
+"b3" => ("Fe", 0.516891, ""),
+"b2" => ("Mg", 0.51727, ""),
+"b1" => ("Mg", 0.518362, ""),
+"E2" => ("Fe", 0.527039, ""),
+"D3" => ("He", 0.5875618, ""),
+"D2" => ("Na", 0.588995, ""),
+"D1" => ("Na", 0.589592, ""),
+"a" => ("O2", 0.627661, ""),
+"B" => ("O2", 0.686719, ""),
+"A" => ("O2", 0.75937, ""),
+"Z" => ("O2", 0.822696, ""),
+"y" => ("O2", 0.898765, "")
+)
+
+fraunhofer_λum(line::AbstractString) = get(_fraunhofer_lines,line,NaN)[2]
+fraunhofer_source(line::AbstractString) = get(_fraunhofer_lines,line,"")[1]
+fraunhofer_color(line::AbstractString) = get(_fraunhofer_lines,line,"")[3]
+fraunhofer_standards() = keys(filter((k,v)->!isempty(v[3]), _fraunhofer_lines))
+
 function refindex{T<:Real}(::Type{Val{Sellmeier}}, C::Array{T,1}, λum::T)
   local N = length(C)
   @assert isodd(N) && N>=3 "index equation requires an odd number of coefficients"
